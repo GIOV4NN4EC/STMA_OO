@@ -1,150 +1,125 @@
-import subfunctions as sbf
+team = []
+players = [] #lista de jogadores
+recruits = [] #lista de recrutas
+events = [] #lista de eventos (partidas ou treinos)
+equipments = [] #lista de equipamentos
+injuried_players = [] #lista de jogadores lesionados
 
-def manage_players():
-    while True:
-        print("\nMENU DE GERENCIAMENTO DE JOGADORES")
-        print("1. Adicionar Jogador")
-        print("2. Listar Jogadores")
-        print("3. Editar Jogador")
-        print("4. Remover Jogador")
-        print("5. Voltar")
-        opcao = input("Escolha: ")
+class Team:
+    pass
 
-        if opcao == "1":
-            sbf.add_player()
-        elif opcao == "2":
-            sbf.list_players()
-        elif opcao == "3":
-            sbf.edit_player()
-        elif opcao == "4":
-            sbf.remove_player()
-        elif opcao == "5":
-            break
-        else:
-            print("Opção inválida.")
+class Poll:
+    poll_id_counter = 0
+    def __init__(self, title, description, opt1, opt2, opt3):
+        Poll.poll_id_counter += 1
+        self.title = title
+        self.description = description
+        self.opt1 = opt1
+        self.opt2 = opt2
+        self.opt3 = opt3
+        
+class Post:
+    post_id_counter = 0
+    def __init__(self, title, content, date):
+        Post.post_id_counter += 1
+        self.title = title
+        self.content = content
+        self.date = date
 
-def manage_matches():
-    while True:
-        print("\n--- PARTIDAS E TREINOS ---")
-        print("1. Agendar Partida")
-        print("2. Listar Partidas")
-        print("3. Agendar Treino")
-        print("4. Listar Treinos")
-        print("5. Voltar")
-        opcao = input("Escolha: ")
 
-        if opcao == "1":
-            sbf.schedule_match()
-        elif opcao == "2":
-            sbf.list_matches()
-        elif opcao == "3":
-            sbf.schedule_training()
-        elif opcao == "4":
-            sbf.list_trainings()
-        elif opcao == "5":
-            break
-        else:
-            print("Opção inválida.")
+class Account:
+    def __init__(self, balance):
+        self.balance  = balance
 
-def manage_equipment():
-    while True:
-        print("\n--- EQUIPMENT MANAGEMENT ---")
-        print("1. Add Equipment")
-        print("2. List Equipment")
-        print("3. Edit Equipment")
-        print("4. Remove Equipment")
-        print("5. Back")
-        option = input("Choose: ")
+class Recruit:
+    recruit_id_counter = 0
+    def __init__(self, name, age, pros, cons, position, observation):
+        Recruit.recruit_id_counter += 1
+        self.name = name
+        self.age = age
+        self.pros = pros
+        self.cons = cons
+        self.position = position
+        self.observation = observation
+        
 
-        if option == "1":
-            sbf.add_equipment()
-        elif option == "2":
-            sbf.list_equipment()
-        elif option == "3":
-            sbf.edit_equipment()
-        elif option == "4":
-            sbf.remove_equipment()
-        elif option == "5":
-            break
-        else:
-            print("Invalid option.")
+class Equipment:
+    equipment_id_counter = 0
+    def __init__(self, name, type, quantity, status, observation):
+        Equipment.equipment_id_counter += 1
+        self.name = name
+        self.type = type
+        self.quantity = quantity
+        self.status = status
+        self.observation = observation
+        
+
+class Stats:
+    def __init__(self, score, games_played, yellow_cards, red_cards):
+        self.score = score
+        self.games_played = games_played
+        self.yellow_cards = yellow_cards
+        self.red_cards = red_cards
+
+
+#Classe para os jogadores
+class Player:
+    id_inicial = 0 #contador para que não tenham IDs repetidos
+
+    def __init__(self, name, age, position, stats, health):
+        Player.id_inicial += 1
+        self.id = Player.id_inicial #ID único do jogador
+        self.name = name #nome do jogador
+        self.age = age #nome do jogador
+        self.position = position #posição do jogador
+        self.stats = stats #estatística do jogador (nesse caso, aproveitamento)
+        self.health = health #estado de saúde do jogador
+
+#Classe para os eventos
+class Match:
+    match_id_counter = 0 #contador para identificar as partidas
+
+    def __init__(self, date, time, location, opponent):
+        Match.match_id_counter += 1
+        self.id = Match.match_id_counter #ID da partida
+        self.date = date #data do evento
+        self.time = time
+        self.location = location #local da partida
+        self.opponent = opponent #oponente (se houver)
+        self.result = None  #resultado (se houver)
+
+class Training:
+    training_id_counter = 0 #contador para identificar os eventos
+
+    def __init__(self, date, time, location, focus):
+        Training.training_id_counter += 1
+        self.id = Training.training_id_counter #ID da partida
+        self.date = date #data do evento
+        self.time = time
+        self.location = location #local da partida
+        self.focus = focus #objetivo do treino (se houiver)
+
+def team_management():
+    pass
+
+def schedule_event():
+    pass
+
+def performance_tracking():
+    pass
+
+def health_monitoring():
+    pass
+
+def manage_equipments():
+    pass
+
+def manage_player_recruitment():
+    pass
 
 def manage_finances():
-    while True:
-        print("\n--- FINANCIAL MANAGEMENT ---")
-        print("1. Register Income")
-        print("2. Register Expense")
-        print("3. List Transactions")
-        print("4. Generate Report")
-        print("5. Back")
-        option = input("Choose: ")
-
-        if option == "1":
-            sbf.register_income()
-        elif option == "2":
-            sbf.register_expense()
-        elif option == "3":
-            sbf.list_transactions()
-        elif option == "4":
-            sbf.generate_financial_report()
-        elif option == "5":
-                break
-        else:
-            print("Invalid option.")
+    pass
 
 def media_and_social():
-    while True:
-        print("\nMEDIA AND SOCIAL")
-        print("1. Create Post")
-        print("2. List Posts")
-        print("3. Create Poll")
-        print("4. List Polls")
-        print("5. Back")
-        option = input("Choose: ")
+    pass
 
-        if option == "1":
-            sbf.create_post()
-        elif option == "2":
-            sbf.list_posts()
-        elif option == "3":
-            sbf.create_poll()
-        elif option == "4":
-            sbf.list_polls()
-        elif option == "5":
-            break
-        else:
-            print("Invalid option.")
-
-def main_menu():
-    print("\n===== SPORTS TEAM MANAGEMENT APP =====")
-    print(" Selecione a opção desejada:")
-    print("1. Gerenciar Jogadores")
-    print("2. Gerenciar Partidas e Treinos")
-    print("3. Gerenciar Equipamentos")
-    print("4. Gerenciar Finanças")
-    print("5. Mídia e Social")
-    print("Digite Q para sair.")
-
-def main():
-    while True:
-        main_menu()
-        escolha = input("")
-
-        if escolha == "1":
-            manage_players()
-        elif escolha == "2":
-            manage_matches()
-        elif escolha == "3":
-            manage_equipment()
-        elif escolha == "4":
-            manage_finances()
-        elif escolha == "5":
-            media_and_social()
-        elif escolha == "Q":
-            print("Encerrando o sistema.")
-            break
-        else:
-            print("Opção inválida!")
-
-if __name__ == "__main__":
-    main()
