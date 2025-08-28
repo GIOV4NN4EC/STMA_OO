@@ -219,8 +219,8 @@ def list_events():
         return
 
     print("\nEVENTS LIST:")
-    for ev in events:
-        print(ev.details())
+    for event in events:
+        print(event.details())
         print("-" * 90)
 
 
@@ -236,9 +236,9 @@ def delete_event():
         print("INVALID ID.")
         return
 
-    for ev in events:
-        if ev.id == id_remove:
-            events.remove(ev)
+    for event in events:
+        if event.id == id_remove:
+            events.remove(event)
             print("EVENT REMOVED SUCCESSFULLY!")
             return
     print("EVENT NOT FOUND!")
@@ -256,11 +256,11 @@ def register_result():
         print("INVALID ID.")
         return
 
-    for ev in events:
-        if isinstance(ev, Match) and ev.id == match_id:
+    for event in events:
+        if isinstance(event, Match) and event.id == match_id:
             result = input("ENTER MATCH RESULT (EX: WIN 2x1, LOSS 0x3): ")
             if result:
-                ev.result = result
+                event.result = result
                 print("RESULT REGISTERED SUCCESSFULLY.")
             else:
                 print("NO CHANGES MADE.")
