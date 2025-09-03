@@ -202,7 +202,7 @@ class Player:
             raise ValueError("Player name cannot be empty.")
         if not isinstance(age, int) or not (15 <= age <= 45):
             raise ValueError("Player age must be a number between 15 and 45.")
-        if not position.strip(): # Position validation was removed, now only checks if empty
+        if not position.strip(): 
             raise ValueError("Player position cannot be empty.")
         if not isinstance(stats, Stats):
             raise TypeError("The 'stats' argument must be an object of the Stats class.")
