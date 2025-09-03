@@ -1,16 +1,20 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
 
-# Classe para enquetes
+
 class Poll:
     poll_id_counter = 0
     def __init__(self, title, description, opt1, opt2, opt3):
+        if not all([title.strip(), description.strip(), opt1.strip(), opt2.strip()]):
+            raise ValueError("Poll title, description, and the first two options cannot be empty.")
+        
         Poll.poll_id_counter += 1
         self.__title = title
         self.__description = description
         self.__opt1 = opt1
         self.__opt2 = opt2
         self.__opt3 = opt3
-
+    
     @property
     def title(self):
         return self.__title
@@ -31,15 +35,26 @@ class Poll:
     def opt3(self):
         return self.__opt3
 
-# Classe para postagens
+
 class Post:
     post_id_counter = 0
-    def __init__(self, title, content, date):
+    def __init__(self, title, content, date_str):
+        if not title.strip() or not content.strip():
+            raise ValueError("Post title and content cannot be empty.")
+        
+        try:
+            self.__date = datetime.strptime(date_str, '%d/%m/%Y')
+        except ValueError:
+            raise ValueError("Invalid date format for the post. Use DD/MM/YYYY.")
+            
         Post.post_id_counter += 1
         self.__title = title
         self.__content = content
-        self.__date = date
-
+    
+    @property
+    def date(self):
+        return self.__date.strftime('%d/%m/%Y')
+    
     @property
     def title(self):
         return self.__title
@@ -48,27 +63,38 @@ class Post:
     def content(self):
         return self.__content
 
-    @property
-    def date(self):
-        return self.__date
 
-# Classe para conta bancária
 class Account:
     def __init__(self, balance):
-        self.__balance  = balance
+        if not isinstance(balance, (int, float)):
+            raise TypeError("Initial balance must be a number.")
+        self.__balance = balance
 
     @property
     def balance(self):
         return self.__balance
 
-    @balance.setter
-    def balance(self, value):
-        self.__balance = value
+    def add_income(self, value):
+        if not isinstance(value, (int, float)) or value < 0:
+            raise ValueError("Income value must be a positive number.")
+        self.__balance += value
 
-# Classe para Recruta
+    def add_expense(self, value):
+        if not isinstance(value, (int, float)) or value < 0:
+            raise ValueError("Expense value must be a positive number.")
+        if value > self.__balance:
+            raise ValueError("Insufficient balance to cover the expense.")
+        self.__balance -= value
+
+
 class Recruit:
     recruit_id_counter = 0
     def __init__(self, name, age, pros, cons, position, observation):
+        if not name.strip() or not position.strip():
+            raise ValueError("Recruit name and position are mandatory.")
+        if not isinstance(age, int) or age <= 0:
+            raise ValueError("Recruit age must be a positive integer.")
+            
         Recruit.recruit_id_counter += 1
         self.__name = name
         self.__age = age
@@ -76,7 +102,7 @@ class Recruit:
         self.__cons = cons
         self.__position = position
         self.__observation = observation
-
+    
     @property
     def name(self):
         return self.__name
@@ -101,17 +127,25 @@ class Recruit:
     def observation(self):
         return self.__observation
 
-# Classe para equipamentos
+
 class Equipment:
+    VALID_STATUSES = ["new", "used", "damaged", "under maintenance"]
     equipment_id_counter = 0
     def __init__(self, name, type, quantity, status, observation):
+        if not name.strip() or not type.strip():
+            raise ValueError("Equipment name and type are mandatory.")
+        if not isinstance(quantity, int) or quantity < 0:
+            raise ValueError("Quantity must be a non-negative integer.")
+        if status.lower() not in self.VALID_STATUSES:
+            raise ValueError(f"Invalid status. Use one of the following: {', '.join(self.VALID_STATUSES)}")
+            
         Equipment.equipment_id_counter += 1
         self.__name = name
         self.__type = type
         self.__quantity = quantity
         self.__status = status
         self.__observation = observation
-
+    
     @property
     def name(self):
         return self.__name
@@ -132,11 +166,11 @@ class Equipment:
     def observation(self):
         return self.__observation
 
-# Classe para estatísticas do jogador
+
 class Stats:
     def __init__(self, score, games_played):
-        self.__score = score
-        self.__games_played = games_played
+        self.score = score
+        self.games_played = games_played
 
     @property
     def score(self):
@@ -144,6 +178,8 @@ class Stats:
 
     @score.setter
     def score(self, value):
+        if not isinstance(value, int) or value < 0:
+            raise ValueError("Score must be a non-negative integer.")
         self.__score = value
 
     @property
@@ -152,13 +188,25 @@ class Stats:
 
     @games_played.setter
     def games_played(self, value):
+        if not isinstance(value, int) or value < 0:
+            raise ValueError("Games played must be a non-negative integer.")
         self.__games_played = value
 
-# Classe para jogador
+
 class Player:
     id_inicial = 0
 
     def __init__(self, id, name, age, position, stats, health):
+        
+        if not name.strip():
+            raise ValueError("Player name cannot be empty.")
+        if not isinstance(age, int) or not (15 <= age <= 45):
+            raise ValueError("Player age must be a number between 15 and 45.")
+        if not position.strip(): # Position validation was removed, now only checks if empty
+            raise ValueError("Player position cannot be empty.")
+        if not isinstance(stats, Stats):
+            raise TypeError("The 'stats' argument must be an object of the Stats class.")
+            
         Player.id_inicial += 1
         self.__id = Player.id_inicial
         self.__name = name
@@ -166,7 +214,7 @@ class Player:
         self.__position = position
         self.__stats = stats
         self.__health = health
-
+    
     @property
     def id(self):
         return self.__id
@@ -203,24 +251,28 @@ class Player:
     def health(self, value):
         self.__health = value
 
-# Classe abstrata para eventos
 class Event(ABC):
     event_id_counter = 0
-
-    def __init__(self, date, time, location):
+    def __init__(self, date_str, time, location):
+        if not location.strip():
+            raise ValueError("The event location cannot be empty.")
+        try:
+            self._date = datetime.strptime(date_str, '%d/%m/%Y')
+        except ValueError:
+            raise ValueError("Invalid date format for the event. Use DD/MM/YYYY.")
+        
         Event.event_id_counter += 1
         self._id = Event.event_id_counter
-        self._date = date
         self._time = time
         self._location = location
 
     @property
+    def date(self):
+        return self._date.strftime('%d/%m/%Y')
+    
+    @property
     def id(self):
         return self._id
-
-    @property
-    def date(self):
-        return self._date
 
     @property
     def time(self):
@@ -229,18 +281,19 @@ class Event(ABC):
     @property
     def location(self):
         return self._location
-
+    
     @abstractmethod
     def details(self):
         pass
 
-# Subclasse para partidas
 class Match(Event):
     def __init__(self, date, time, opponent, location):
         super().__init__(date, time, location)
+        if not opponent.strip():
+            raise ValueError("The opponent's name cannot be empty.")
         self.__opponent = opponent
         self.__result = None
-
+    
     @property
     def opponent(self):
         return self.__opponent
@@ -254,20 +307,22 @@ class Match(Event):
         self.__result = value
 
     def details(self):
-        return (f"ID: {self.id} | MATCH vs {self.opponent} | "
-                f"DATE: {self.date} | TIME: {self.time} | "
-                f"LOCATION: {self.location} | RESULT: {self.result or 'NOT DEFINED'}")
+        return (f"ID: {self.id} | Match vs {self.opponent} | "
+                f"Date: {self.date} | Time: {self.time} | "
+                f"Location: {self.location} | Result: {self.result or 'Not defined'}")
 
-# Subclasse para treinamentos
+
 class Training(Event):
     def __init__(self, date, time, location, focus):
         super().__init__(date, time, location)
+        if not focus.strip():
+            raise ValueError("The training focus cannot be empty.")
         self.__focus = focus
-
+    
     @property
     def focus(self):
         return self.__focus
 
     def details(self):
-        return (f"ID: {self.id} | TRAINING | DATE: {self.date} | TIME: {self.time} | "
-                f"LOCATION: {self.location} | FOCUS: {self.focus}")
+        return (f"ID: {self.id} | Training | Date: {self.date} | Time: {self.time} | "
+                f"Location: {self.location} | Focus: {self.focus}")
